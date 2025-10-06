@@ -36,7 +36,7 @@ public class CourseJPARepositoryAdapter extends AdapterOperations<
         try {
             var entities = repository.findAll();
             var courses = StreamSupport.stream(entities.spliterator(), false)
-                    .map(entity -> mapper.map(entity, Course.class))
+                    .map(courseMapper::toModel)
                     .toList();
 
             log.debug("[COURSE-REPOSITORY] Retrieved {} courses from database.", courses.size());
