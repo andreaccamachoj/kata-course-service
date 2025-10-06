@@ -35,9 +35,9 @@ management:
       probes:
         enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "{ALLOWED_CORS_ORIGIN:http://localhost:4200,http://localhost:8080}"
 adapter:
   aws:
     s3:
-      bucketName: "coursefileslearningacademykatabb"
-      region: "us-east-1"
+      bucketName: "${BUCKET_NAME:coursefileslearningacademykatabb}"
+      region: "${AWS_REGION:us-east-1}"
