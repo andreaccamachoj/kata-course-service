@@ -43,7 +43,7 @@ public class CourseUseCase {
             chapter.setS3Key(s3Key);
             chapter.setContentType(matchingFile.getContentType());
         });
-        Course savedCourse = courseRepository.saveAggregate(course);
+        courseRepository.saveAggregate(course);
     }
 
     private UploadedFile findFileByFileName(List<UploadedFile> files, String fileName) {

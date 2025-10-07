@@ -60,16 +60,4 @@ public class CourseRest {
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-
-    @PostMapping("/test-upload")
-    public ResponseEntity<String> testUpload(@RequestParam("file") MultipartFile file) {
-        System.out.println("=== FILE DEBUG ===");
-        System.out.println("File received: " + (file != null));
-        if (file != null) {
-            System.out.println("Filename: " + file.getOriginalFilename());
-            System.out.println("Size: " + file.getSize());
-            System.out.println("ContentType: " + file.getContentType());
-        }
-        return ResponseEntity.ok("File: " + (file != null ? file.getOriginalFilename() : "NULL"));
-    }
 }

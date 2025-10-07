@@ -5,6 +5,7 @@ import co.com.bb.kata.model.exception.TechnicalException;
 import co.com.bb.kata.model.exception.message.TechnicalExceptionMessage;
 import co.com.bb.kata.model.gateway.RestConsumerAuthGateway;
 import co.com.bb.kata.model.gateway.model.User;
+import co.com.bb.kata.model.gateway.model.ValidateToken;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -15,6 +16,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -40,7 +42,7 @@ public class RestConsumerAuth implements RestConsumerAuthGateway {
     @Override
     @CircuitBreaker(name = "getUserById", fallbackMethod = "getUserByIdFallback")
     public User getUserById(Long userId) {
-        String fullUrl = String.format("%s/%d", baseUrl, userId);
+        String fullUrl = String.format("%s/user/%d", baseUrl, userId);
         log.info("[REST-AUTH] Sending GET request to {}", fullUrl);
 
         try {
@@ -66,11 +68,6 @@ public class RestConsumerAuth implements RestConsumerAuthGateway {
         }
     }
 
-    public User getUserByIdFallback(Long userId, Throwable throwable) {
-        log.error("[REST-AUTH] Fallback triggered for userId {}. Cause: {}", userId, throwable.getMessage());
-        throw new TechnicalException(TechnicalExceptionMessage.REST_CONSUMER_FALLBACK);
-    }
-
     private User toDomain(UserResponse response) {
         return User.builder()
                 .id(response.getId())
@@ -81,5 +78,47 @@ public class RestConsumerAuth implements RestConsumerAuthGateway {
                 .roleId(response.getRoleId())
                 .roleName(response.getRoleName())
                 .build();
+    }
+    public User getUserByIdFallback(Long userId, Throwable throwable) {
+        log.error("[REST-AUTH] Fallback ejecutado para getUserById({}, {}): {}",
+                userId, throwable.getClass().getSimpleName(), throwable.getMessage());
+        return null; // o puedes devolver un User vacío si lo prefieres
+    }
+
+
+    @Override
+    @CircuitBreaker(name = "validateToken", fallbackMethod = "validateTokenFallback")
+    public ValidateToken validateToken(String token) {
+        String fullUrl = String.format("%s/validate", baseUrl);
+        log.info("[REST-AUTH] Validating token via {}", fullUrl);
+
+        try {
+            Request request = new Request.Builder()
+                    .url(fullUrl)
+                    .get()
+                    .addHeader(HttpHeaders.AUTHORIZATION, token.startsWith("Bearer ") ? token : "Bearer " + token)
+                    .build();
+
+            try (Response response = client.newCall(request).execute()) {
+                if (response.isSuccessful() && response.body() != null) {
+                    String json = response.body().string();
+                    return mapper.readValue(json, ValidateToken.class);
+                } else if (response.code() == 401) {
+                    log.warn("[REST-AUTH] Invalid or expired token");
+                    return ValidateToken.builder().valid(false).build();
+                } else {
+                    log.error("[REST-AUTH] Unexpected response {}", response.code());
+                    throw new TechnicalException(TechnicalExceptionMessage.REST_CONSUMER_ERROR);
+                }
+            }
+        } catch (Exception e) {
+            log.error("[REST-AUTH] Exception validating token: {}", e.getMessage(), e);
+            throw new TechnicalException(TechnicalExceptionMessage.REST_CONSUMER_ERROR);
+        }
+    }
+
+    public ValidateToken validateTokenFallback(String token, Throwable throwable) {
+        log.error("[REST-AUTH] Fallback triggered: {}", throwable.getMessage());
+        return ValidateToken.builder().valid(false).build();
     }
 }
