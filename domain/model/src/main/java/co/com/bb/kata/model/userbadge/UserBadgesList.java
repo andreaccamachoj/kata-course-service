@@ -1,6 +1,5 @@
 package co.com.bb.kata.model.userbadge;
 
-import co.com.bb.kata.model.course.Course;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,10 +9,12 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class UserBadge {
+public class UserBadgesList {
     private Long id;
     private Long userId;
     private Long badgeId;
-    private Course course;
-    private LocalDateTime awardedAt;
+    private String badgeName;
+    private String badgeDescription;
+    private String badgeIconUrl;
+    private LocalDateTime assignedAt;
 }

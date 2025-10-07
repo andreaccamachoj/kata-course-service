@@ -7,6 +7,7 @@ spring:
     add-properties: false
   servlet:
     multipart:
+      enabled: true
       max-file-size: "1000MB"
       max-request-size: "2000MB"
   h2:

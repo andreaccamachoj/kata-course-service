@@ -5,11 +5,13 @@ import co.com.bb.kata.jpa.entity.BadgeEntity;
 import co.com.bb.kata.jpa.entity.UserBadgeEntity;
 import co.com.bb.kata.jpa.helper.AdapterOperations;
 import co.com.bb.kata.model.userbadge.UserBadge;
+import co.com.bb.kata.model.userbadge.UserBadgesList;
 import co.com.bb.kata.model.userbadge.gateways.UserBadgeRepository;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class UserBadgeJPARepositoryAdapter extends AdapterOperations<
@@ -48,4 +50,21 @@ public class UserBadgeJPARepositoryAdapter extends AdapterOperations<
                 .awardedAt(saved.getAwardedAt())
                 .build();
     }
+
+    @Override
+    public List<UserBadgesList> findByUserId(Long userId) {
+        return repository.findByUserId(userId)
+                .stream()
+                .map(entity -> UserBadgesList.builder()
+                        .id(entity.getId())
+                        .userId(entity.getUserId())
+                        .badgeId(entity.getBadge().getId())
+                        .badgeName(entity.getBadge().getName())
+                        .badgeDescription(entity.getBadge().getDescription())
+                        .badgeIconUrl(entity.getBadge().getIconS3Key())
+                        .assignedAt(entity.getAwardedAt())
+                        .build())
+                .toList();
+    }
+
 }
