@@ -21,6 +21,10 @@ public enum BusinessExceptionMessage {
     NO_CHAPTERS_FOR_COURSE(
             "BUS0004", "The course has no registered chapters", "404",
             "The course with the provided ID has no registered chapters."
+    ),
+    COURSE_NOT_ASSIGNED(
+            "BUS0005", "The user is not assigned to this course", "404",
+            "The user is not assigned to the course with the provided ID."
     );
 
     private final String code;

@@ -39,13 +39,26 @@ public class UserCourseUseCase {
     }
 
     public List<CourseProgressResponse> getUserCoursesProgress(Long userId) {
-        // Validar que el usuario exista
         var user = restConsumerAuthGateway.getUserById(userId);
         if (user == null) {
             throw new BusinessException(BusinessExceptionMessage.USER_NOT_FOUND);
         }
 
         return userCourseProgressRepository.findProgressByUserId(userId);
+    }
+
+    public CourseProgressResponse getUserCourseProgress(Long userId, Long courseId) {
+        var user = restConsumerAuthGateway.getUserById(userId);
+        if (user == null) {
+            throw new BusinessException(BusinessExceptionMessage.USER_NOT_FOUND);
+        }
+
+        CourseProgressResponse progress = userCourseProgressRepository.findProgressByUserAndCourse(userId, courseId);
+        if (progress == null) {
+            throw new BusinessException(BusinessExceptionMessage.COURSE_NOT_ASSIGNED);
+        }
+
+        return progress;
     }
 
 }

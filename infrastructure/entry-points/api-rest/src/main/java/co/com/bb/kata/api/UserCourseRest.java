@@ -40,4 +40,13 @@ public class UserCourseRest {
         return ResponseEntity.ok(progressList);
     }
 
+    @GetMapping("/courses/{courseId}/progress/{userId}")
+    public ResponseEntity<CourseProgressResponse> getUserCourseProgress(
+            @PathVariable("courseId") Long courseId,
+            @PathVariable("userId") Long userId) {
+
+        CourseProgressResponse progress = userCourseUseCase.getUserCourseProgress(userId, courseId);
+        return ResponseEntity.ok(progress);
+    }
+
 }

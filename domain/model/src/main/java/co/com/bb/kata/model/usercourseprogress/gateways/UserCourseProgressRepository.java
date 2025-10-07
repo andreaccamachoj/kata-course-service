@@ -15,4 +15,6 @@ public interface UserCourseProgressRepository {
 
     List<CourseProgressResponse> findProgressByUserId(Long userId);
 
+    CourseProgressResponse findProgressByUserAndCourse(Long userId, Long courseId);
+
 }

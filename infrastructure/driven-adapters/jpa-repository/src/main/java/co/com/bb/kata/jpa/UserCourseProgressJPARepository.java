@@ -21,4 +21,14 @@ public interface UserCourseProgressJPARepository extends CrudRepository<UserCour
     """)
     List<UserCourseProgressEntity> findAllProgressByUserId(@Param("userId") Long userId);
 
+    @Query("""
+        SELECT ucp FROM UserCourseProgressEntity ucp
+        JOIN FETCH ucp.course c
+        WHERE ucp.userId = :userId AND c.id = :courseId
+    """)
+    Optional<UserCourseProgressEntity> findProgressByUserIdAndCourseId(
+            @Param("userId") Long userId,
+            @Param("courseId") Long courseId
+    );
+
 }

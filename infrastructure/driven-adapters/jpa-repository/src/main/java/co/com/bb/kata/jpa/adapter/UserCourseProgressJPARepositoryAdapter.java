@@ -97,4 +97,16 @@ public class UserCourseProgressJPARepositoryAdapter extends AdapterOperations<
                         .build())
                 .toList();
     }
+
+    @Override
+    public CourseProgressResponse findProgressByUserAndCourse(Long userId, Long courseId) {
+        return repository.findProgressByUserIdAndCourseId(userId, courseId)
+                .map(entity -> CourseProgressResponse.builder()
+                        .courseId(entity.getCourse().getId())
+                        .courseTitle(entity.getCourse().getTitle())
+                        .progressPct(entity.getProgressPct())
+                        .completedAt(entity.getCompletedAt() != null ? entity.getCompletedAt().toLocalDate() : null)
+                        .build())
+                .orElse(null);
+    }
 }
