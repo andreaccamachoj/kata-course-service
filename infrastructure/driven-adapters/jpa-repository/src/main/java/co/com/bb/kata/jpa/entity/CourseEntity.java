@@ -32,6 +32,9 @@ public class CourseEntity {
     @Column(length = 255)
     private String tags;
 
+    @Column(length = 255)
+    private String coverUrl;
+
     @Column(nullable = false)
     private Boolean published;
 

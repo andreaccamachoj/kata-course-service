@@ -20,6 +20,7 @@ public class Course {
     private String description;
     private String tags;
     private Boolean published;
+    private String coverUrl;
     private LocalDateTime createdAt;
     private List<Chapter> chapterList;
 }
