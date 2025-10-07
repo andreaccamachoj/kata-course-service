@@ -16,6 +16,7 @@ public interface CourseMapper {
     CourseMapper INSTANCE = Mappers.getMapper(CourseMapper.class);
 
     @Mapping(target = "moduleId", source = "moduleId.id")
+    @Mapping(target = "moduleName", source = "moduleId.name")
     @Mapping(target = "chapterList", source = "chapterEntities")
     Course toModel(CourseEntity entity);
 

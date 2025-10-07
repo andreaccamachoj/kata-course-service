@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS training.courses (
     tags         VARCHAR(255),
     published    BOOLEAN DEFAULT FALSE,
     created_at   TIMESTAMP WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+	coverUrl    VARCHAR(512),
     CONSTRAINT fk_courses_module
         FOREIGN KEY (module_id)
         REFERENCES training.modules (id)
@@ -61,7 +62,7 @@ CREATE INDEX IF NOT EXISTS idx_chapters_order_idx  ON training.chapters (order_i
 -- Seeds para modules (idempotentes)
 -- ==========================================
 INSERT INTO training.modules (key, name, description, image_url) VALUES
-    ('FULLSTACK',        'Fullstack',            'Módulo sobre desarrollo Fullstack con frameworks y stacks modernos.', 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800')
+    ('FULLSTACK',        'Fullstack',            'Módulo sobre desarrollo Fullstack con frameworks y stacks modernos.', 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800'),
     ('API_INTEGRATIONS', 'APIs e Integraciones', 'Módulo centrado en diseño e implementación de APIs, buses e integraciones.', 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800'),
     ('CLOUD',            'Cloud',                'Módulo enfocado en despliegue y administración en plataformas en la nube.', 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=800'),
     ('DATA_ENGINEER',    'Data Engineer',        'Módulo sobre ingeniería de datos y procesamiento de información.', 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800'),
@@ -69,27 +70,76 @@ INSERT INTO training.modules (key, name, description, image_url) VALUES
     ('BACKEND',          'Backend',              'Módulo centrado en el desarrollo de servicios y APIs robustas del lado del servidor.', 'https://images.unsplash.com/photo-1627398242454-45a1465c2479?w=800')
 ON CONFLICT (key) DO NOTHING;
 
-
 -- ============================================================
 -- SEEDS: COURSES
 -- ============================================================
-INSERT INTO training.courses (module_id, title, description, tags, published, created_at)
-SELECT m.id, c.title, c.description, c.tags, c.published, c.created_at::timestamp
+INSERT INTO training.courses (module_id, title, description, tags, published, created_at, coverUrl)
+SELECT m.id, c.title, c.description, c.tags, c.published, c.created_at::timestamp, c.coverUrl
 FROM (
     VALUES
-        ('APIs e Integraciones', 'Microservicios con API Gateway', 'Aprende a diseñar y construir arquitecturas de microservicios escalables usando API Gateway.', 'APIs,Gateway,Best Practices', true, '2025-06-10T12:00:00'),
-        ('Frontend',             'React Avanzado: Hooks y Patterns', 'Domina los hooks personalizados y patrones avanzados de React para aplicaciones modernas.', 'React,Hooks,Patterns', true, '2025-07-15T10:00:00'),
-        ('Backend',              'Node.js y Express: Backend Robusto', 'Construye APIs robustas y escalables con Node.js y Express.', 'Node.js,Express,REST', true, '2025-08-01T09:00:00'),
-        ('Cloud',                'AWS: De Zero a Cloud', 'Aprende a desplegar aplicaciones en AWS desde cero.', 'AWS,Cloud,DevOps', true, '2025-09-10T11:00:00'),
-        ('Data Engineer',        'Python para Data Engineer', 'Fundamentos de Python aplicados al análisis y procesamiento de datos.', 'Python,Data,Analytics', true, '2025-10-05T08:00:00'),
-        ('Fullstack',            'Fullstack MERN: Proyecto Completo', 'Construye aplicaciones fullstack con MongoDB, Express, React y Node.', 'MERN,Fullstack,MongoDB', true, '2025-09-20T14:00:00'),
-        ('Frontend',             'TypeScript: Tipado Fuerte', 'Aprende TypeScript y sus beneficios para proyectos escalables.', 'TypeScript,JavaScript,Types', true, '2025-08-25T10:00:00'),
-        ('Cloud',                'Docker: Contenedores en Producción', 'Domina Docker para desplegar aplicaciones en contenedores.', 'Docker,Containers,DevOps', true, '2025-07-30T09:30:00'),
-        ('APIs e Integraciones', 'GraphQL: APIs Modernas', 'Aprende a construir APIs flexibles con GraphQL.', 'GraphQL,APIs,Backend', true, '2025-06-20T11:00:00'),
-        ('Backend',              'SQL Avanzado: Optimización', 'Técnicas avanzadas de SQL para bases de datos relacionales.', 'SQL,Database,Performance', true, '2025-08-10T13:00:00')
-) AS c(module_name, title, description, tags, published, created_at)
+        -- APIs e Integraciones
+        ('APIs e Integraciones', 'Microservicios con API Gateway',
+         'Aprende a diseñar y construir arquitecturas de microservicios escalables usando API Gateway.',
+         'APIs,Gateway,Best Practices', true, '2025-06-10T12:00:00',
+         'https://images.unsplash.com/photo-1518770660439-4636190af475'),
+
+        -- Frontend
+        ('Frontend', 'React Avanzado: Hooks y Patterns',
+         'Domina los hooks personalizados y patrones avanzados de React para aplicaciones modernas.',
+         'React,Hooks,Patterns', true, '2025-07-15T10:00:00',
+         'https://images.unsplash.com/photo-1587620962725-abab7fe55159'),
+
+        -- Backend
+        ('Backend', 'Node.js y Express: Backend Robusto',
+         'Construye APIs robustas y escalables con Node.js y Express.',
+         'Node.js,Express,REST', true, '2025-08-01T09:00:00',
+         'https://images.unsplash.com/photo-1515879218367-8466d910aaa4'),
+
+        -- Cloud
+        ('Cloud', 'AWS: De Zero a Cloud',
+         'Aprende a desplegar aplicaciones en AWS desde cero.',
+         'AWS,Cloud,DevOps', true, '2025-09-10T11:00:00',
+         'https://images.unsplash.com/photo-1515378791036-0648a3ef77b2'),
+
+        -- Data Engineer
+        ('Data Engineer', 'Python para Data Engineer',
+         'Fundamentos de Python aplicados al análisis y procesamiento de datos.',
+         'Python,Data,Analytics', true, '2025-10-05T08:00:00',
+         'https://images.unsplash.com/photo-1517430816045-df4b7de11d1d'),
+
+        -- Fullstack
+        ('Fullstack', 'Fullstack MERN: Proyecto Completo',
+         'Construye aplicaciones fullstack con MongoDB, Express, React y Node.',
+         'MERN,Fullstack,MongoDB', true, '2025-09-20T14:00:00',
+         'https://images.unsplash.com/photo-1557804506-669a67965ba0'),
+
+        -- Frontend
+        ('Frontend', 'TypeScript: Tipado Fuerte',
+         'Aprende TypeScript y sus beneficios para proyectos escalables.',
+         'TypeScript,JavaScript,Types', true, '2025-08-25T10:00:00',
+         'https://images.unsplash.com/photo-1605379399642-870262d3d051'),
+
+        -- Cloud
+        ('Cloud', 'Docker: Contenedores en Producción',
+         'Domina Docker para desplegar aplicaciones en contenedores.',
+         'Docker,Containers,DevOps', true, '2025-07-30T09:30:00',
+         'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc'),
+
+        -- APIs e Integraciones
+        ('APIs e Integraciones', 'GraphQL: APIs Modernas',
+         'Aprende a construir APIs flexibles con GraphQL.',
+         'GraphQL,APIs,Backend', true, '2025-06-20T11:00:00',
+         'https://images.unsplash.com/photo-1531482615713-2afd69097998'),
+
+        -- Backend
+        ('Backend', 'SQL Avanzado: Optimización',
+         'Técnicas avanzadas de SQL para bases de datos relacionales.',
+         'SQL,Database,Performance', true, '2025-08-10T13:00:00',
+         'https://images.unsplash.com/photo-1519389950473-47ba0277781c')
+) AS c(module_name, title, description, tags, published, created_at, coverUrl)
 JOIN training.modules m ON m.name = c.module_name
 ON CONFLICT DO NOTHING;
+
 
 
 -- ============================================================
@@ -204,4 +254,3 @@ CREATE TABLE training.user_badges (
 );
 
 CREATE UNIQUE INDEX uq_user_badges_user_badge_course
-    ON training.user_badges (user_id, badge_id, course_id);

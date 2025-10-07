@@ -15,6 +15,7 @@ public class Course {
 
     private Long id;
     private Long moduleId;
+    private String moduleName;
     private String title;
     private String description;
     private String tags;

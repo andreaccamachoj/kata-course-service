@@ -1,6 +1,8 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+	implementation project(':rest-consumer')
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
 	implementation project(':s3-repository')
 	implementation project(':metrics')
 	testImplementation 'org.springframework:spring-web'

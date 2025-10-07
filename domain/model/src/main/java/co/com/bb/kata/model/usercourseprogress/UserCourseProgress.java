@@ -1,6 +1,5 @@
 package co.com.bb.kata.model.usercourseprogress;
 
-import co.com.bb.kata.model.course.Course;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,7 +12,7 @@ import java.time.LocalDateTime;
 public class UserCourseProgress {
     private Long id;
     private Long userId; // viene del MS de autenticación
-    private Course course;
+    private Long course;
     private Double progressPct;
     private LocalDateTime completedAt;
 }

@@ -6,9 +6,13 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum BusinessExceptionMessage {
-    USER_ALREADY_EXISTS(
-            "BUS0001", "User already exists", "409",
-            "The user with the provided email or identity document already exists in the system."
+    COURSE_ALREADY_ASSIGNED(
+            "BUS0002", "The course is already assigned to this user.", "409",
+            "The user already has this course assigned in their profile."
+    ),
+    USER_NOT_FOUND(
+            "BUS0001", "The user does not exist in the authentication service.", "404",
+            "The user with the provided ID was not found in the authentication service."
     );
 
     private final String code;
