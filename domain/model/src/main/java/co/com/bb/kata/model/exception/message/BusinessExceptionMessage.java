@@ -13,6 +13,14 @@ public enum BusinessExceptionMessage {
     USER_NOT_FOUND(
             "BUS0001", "The user does not exist in the authentication service.", "404",
             "The user with the provided ID was not found in the authentication service."
+    ),
+    CHAPTER_ALREADY_COMPLETED(
+            "BUS0003", "The chapter has already been completed by the user", "404",
+            "The chapter with the provided ID has already been completed by the user."
+    ),
+    NO_CHAPTERS_FOR_COURSE(
+            "BUS0004", "The course has no registered chapters", "404",
+            "The course with the provided ID has no registered chapters."
     );
 
     private final String code;

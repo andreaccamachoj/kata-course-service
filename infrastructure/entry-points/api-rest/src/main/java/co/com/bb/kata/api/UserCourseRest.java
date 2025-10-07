@@ -1,7 +1,9 @@
 package co.com.bb.kata.api;
 
 import co.com.bb.kata.api.dto.request.UserAssignCourseRequest;
+import co.com.bb.kata.api.dto.request.UserCompleteChapterRequest;
 import co.com.bb.kata.model.usercourseprogress.UserCourseProgress;
+import co.com.bb.kata.usecase.chapter.ChapterUseCase;
 import co.com.bb.kata.usecase.usercourse.UserCourseUseCase;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,11 +20,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserCourseRest {
 
     private final UserCourseUseCase userCourseUseCase;
+    private final ChapterUseCase chapterUseCase;
 
     @PostMapping("/coursesassign")
     public ResponseEntity<UserCourseProgress> assignCourseToUser(@RequestBody UserAssignCourseRequest request) {
         UserCourseProgress progress = userCourseUseCase.assignCourse(request.getUserId(), request.getCourseId());
         return ResponseEntity.status(HttpStatus.CREATED).body(progress);
+    }
+
+    @PostMapping("/chapters/complete")
+    public ResponseEntity<Void> completeChapter(@RequestBody UserCompleteChapterRequest request) {
+        chapterUseCase.completeChapter(request.getUserId(), request.getCourseId(), request.getChapterId());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
 }

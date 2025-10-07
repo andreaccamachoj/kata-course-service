@@ -1,6 +1,5 @@
 package co.com.bb.kata.model.userbadge;
 
-import co.com.bb.kata.model.badge.Badge;
 import co.com.bb.kata.model.course.Course;
 import lombok.*;
 
@@ -14,7 +13,7 @@ import java.time.LocalDateTime;
 public class UserBadge {
     private Long id;
     private Long userId;
-    private Badge badge;
+    private Long badgeId;
     private Course course;
     private LocalDateTime awardedAt;
 }

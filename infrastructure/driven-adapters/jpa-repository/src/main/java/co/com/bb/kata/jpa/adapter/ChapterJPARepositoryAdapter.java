@@ -20,4 +20,9 @@ public class ChapterJPARepositoryAdapter extends AdapterOperations<
     public ChapterJPARepositoryAdapter(ChapterJPARepository repository, ObjectMapper mapper) {
         super(repository, mapper, d -> mapper.map(d, Chapter.class));
     }
+
+    @Override
+    public long countTotalChaptersByCourse(Long courseId) {
+        return repository.countByCourseEntity_Id(courseId);
+    }
 }

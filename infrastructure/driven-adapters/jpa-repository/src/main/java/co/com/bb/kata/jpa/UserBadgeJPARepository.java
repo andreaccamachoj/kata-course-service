@@ -5,4 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.QueryByExampleExecutor;
 
 public interface UserBadgeJPARepository extends CrudRepository<UserBadgeEntity, Long>, QueryByExampleExecutor<UserBadgeEntity> {
+
+
+    boolean existsByUserIdAndBadge_Id(Long userId, Long badgeId);
 }

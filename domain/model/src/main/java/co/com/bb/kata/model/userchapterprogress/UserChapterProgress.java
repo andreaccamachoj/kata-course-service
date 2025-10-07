@@ -1,6 +1,5 @@
 package co.com.bb.kata.model.userchapterprogress;
 
-import co.com.bb.kata.model.chapter.Chapter;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -13,6 +12,6 @@ import java.time.LocalDateTime;
 public class UserChapterProgress {
     private Long id;
     private Long userId; // viene del microservicio de autenticación
-    private Chapter chapter;
+    private Long chapterId;
     private LocalDateTime completedAt;
 }

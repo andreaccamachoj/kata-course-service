@@ -254,3 +254,93 @@ CREATE TABLE training.user_badges (
 );
 
 CREATE UNIQUE INDEX uq_user_badges_user_badge_course
+
+-- ============================================
+-- 🎓 Insert badges (1:1 relation with courses)
+-- ============================================
+
+INSERT INTO training.badges (name, description, icon_s3_key, criterion, course_id)
+VALUES
+( 'Fullstack Foundations',
+  'Badge awarded for completing the Fullstack Foundations course.',
+  'https://cdn-icons-png.flaticon.com/512/906/906324.png',
+  'course_completed',
+  1),
+
+( 'Advanced Backend Development',
+  'Badge awarded for completing the Advanced Backend Development course.',
+  'https://cdn-icons-png.flaticon.com/512/2721/2721268.png',
+  'course_completed',
+  2),
+
+( 'Frontend Mastery',
+  'Badge awarded for completing the Frontend Mastery course.',
+  'https://cdn-icons-png.flaticon.com/512/919/919828.png',
+  'course_completed',
+  3),
+
+( 'API Design and Integration',
+  'Badge awarded for completing the API Design and Integration course.',
+  'https://cdn-icons-png.flaticon.com/512/2977/2977885.png',
+  'course_completed',
+  4),
+
+( 'Microservices Architecture',
+  'Badge awarded for completing the Microservices Architecture course.',
+  'https://cdn-icons-png.flaticon.com/512/9128/9128429.png',
+  'course_completed',
+  5),
+
+( 'Cloud Fundamentals',
+  'Badge awarded for completing the Cloud Fundamentals course.',
+  'https://cdn-icons-png.flaticon.com/512/4144/4144734.png',
+  'course_completed',
+  6),
+
+( 'AWS Essentials',
+  'Badge awarded for completing the AWS Essentials course.',
+  'https://cdn-icons-png.flaticon.com/512/873/873120.png',
+  'course_completed',
+  7),
+
+( 'Data Engineering Basics',
+  'Badge awarded for completing the Data Engineering Basics course.',
+  'https://cdn-icons-png.flaticon.com/512/1048/1048940.png',
+  'course_completed',
+  8),
+
+( 'SQL & Database Optimization',
+  'Badge awarded for completing the SQL & Database Optimization course.',
+  'https://cdn-icons-png.flaticon.com/512/2920/2920277.png',
+  'course_completed',
+  9),
+
+( 'DevOps & CI/CD Pipelines',
+  'Badge awarded for completing the DevOps & CI/CD Pipelines course.',
+  'https://cdn-icons-png.flaticon.com/512/5969/5969125.png',
+  'course_completed',
+  10),
+
+( 'Containerization with Docker',
+  'Badge awarded for completing the Containerization with Docker course.',
+  'https://cdn-icons-png.flaticon.com/512/919/919853.png',
+  'course_completed',
+  11),
+
+( 'Kubernetes Orchestration',
+  'Badge awarded for completing the Kubernetes Orchestration course.',
+  'https://cdn-icons-png.flaticon.com/512/5969/5969129.png',
+  'course_completed',
+  12),
+
+( 'Monitoring & Observability',
+  'Badge awarded for completing the Monitoring & Observability course.',
+  'https://cdn-icons-png.flaticon.com/512/5525/5525683.png',
+  'course_completed',
+  13),
+
+( 'Security Best Practices',
+  'Badge awarded for completing the Security Best Practices course.',
+  'https://cdn-icons-png.flaticon.com/512/1041/1041916.png',
+  'course_completed',
+  14);

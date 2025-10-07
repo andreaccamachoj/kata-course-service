@@ -6,10 +6,11 @@ import co.com.bb.kata.jpa.entity.UserCourseProgressEntity;
 import co.com.bb.kata.jpa.helper.AdapterOperations;
 import co.com.bb.kata.model.usercourseprogress.UserCourseProgress;
 import co.com.bb.kata.model.usercourseprogress.gateways.UserCourseProgressRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
 
 @Repository
 public class UserCourseProgressJPARepositoryAdapter extends AdapterOperations<
@@ -19,6 +20,10 @@ public class UserCourseProgressJPARepositoryAdapter extends AdapterOperations<
         UserCourseProgressJPARepository>
         implements UserCourseProgressRepository
 {
+
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     public UserCourseProgressJPARepositoryAdapter(UserCourseProgressJPARepository repository, ObjectMapper mapper) {
         super(repository, mapper, d -> mapper.map(d, UserCourseProgress.class));
@@ -32,20 +37,39 @@ public class UserCourseProgressJPARepositoryAdapter extends AdapterOperations<
     @Override
     public UserCourseProgress findByUserIdAndCourseId(Long userId, Long courseId) {
         return repository.findByUserIdAndCourse_Id(userId, courseId)
-                .map(entity -> mapper.map(entity, UserCourseProgress.class))
+                .map(entity -> UserCourseProgress.builder()
+                        .id(entity.getId())
+                        .userId(entity.getUserId())
+                        .course(entity.getCourse() != null ? entity.getCourse().getId() : null)
+                        .progressPct(entity.getProgressPct())
+                        .completedAt(entity.getCompletedAt())
+                        .build()
+                )
                 .orElse(null);
     }
 
+
     @Override
     public UserCourseProgress save(UserCourseProgress progress) {
-        UserCourseProgressEntity entity = new UserCourseProgressEntity();
-        entity.setUserId(progress.getUserId());
-        entity.setProgressPct(progress.getProgressPct());
-        entity.setCompletedAt(LocalDateTime.now());
+        UserCourseProgressEntity existing = repository
+                .findByUserIdAndCourse_Id(progress.getUserId(), progress.getCourse())
+                .orElse(null);
 
-        CourseEntity course = new CourseEntity();
-        course.setId(progress.getCourse());
-        entity.setCourse(course);
+        UserCourseProgressEntity entity;
+
+        if (existing != null) {
+            entity = existing;
+            entity.setProgressPct(progress.getProgressPct());
+            entity.setCompletedAt(progress.getCompletedAt());
+        } else {
+            entity = new UserCourseProgressEntity();
+            entity.setUserId(progress.getUserId());
+            entity.setProgressPct(progress.getProgressPct());
+            entity.setCompletedAt(progress.getCompletedAt());
+
+            CourseEntity courseRef = entityManager.getReference(CourseEntity.class, progress.getCourse());
+            entity.setCourse(courseRef);
+        }
 
         UserCourseProgressEntity saved = repository.save(entity);
 
@@ -57,5 +81,4 @@ public class UserCourseProgressJPARepositoryAdapter extends AdapterOperations<
                 .completedAt(saved.getCompletedAt())
                 .build();
     }
-
 }
