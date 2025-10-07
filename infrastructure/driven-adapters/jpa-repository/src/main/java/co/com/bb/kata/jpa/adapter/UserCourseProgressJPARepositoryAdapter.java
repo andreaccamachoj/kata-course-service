@@ -4,12 +4,15 @@ import co.com.bb.kata.jpa.UserCourseProgressJPARepository;
 import co.com.bb.kata.jpa.entity.CourseEntity;
 import co.com.bb.kata.jpa.entity.UserCourseProgressEntity;
 import co.com.bb.kata.jpa.helper.AdapterOperations;
+import co.com.bb.kata.model.usercourseprogress.CourseProgressResponse;
 import co.com.bb.kata.model.usercourseprogress.UserCourseProgress;
 import co.com.bb.kata.model.usercourseprogress.gateways.UserCourseProgressRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 
 @Repository
@@ -80,5 +83,18 @@ public class UserCourseProgressJPARepositoryAdapter extends AdapterOperations<
                 .progressPct(saved.getProgressPct())
                 .completedAt(saved.getCompletedAt())
                 .build();
+    }
+
+    @Override
+    public List<CourseProgressResponse> findProgressByUserId(Long userId) {
+        return repository.findAllProgressByUserId(userId)
+                .stream()
+                .map(entity -> CourseProgressResponse.builder()
+                        .courseId(entity.getCourse().getId())
+                        .courseTitle(entity.getCourse().getTitle())
+                        .progressPct(entity.getProgressPct())
+                        .completedAt(entity.getCompletedAt() != null ? entity.getCompletedAt().toLocalDate() : null)
+                        .build())
+                .toList();
     }
 }

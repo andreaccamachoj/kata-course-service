@@ -4,9 +4,12 @@ import co.com.bb.kata.model.exception.BusinessException;
 import co.com.bb.kata.model.exception.message.BusinessExceptionMessage;
 import co.com.bb.kata.model.gateway.RestConsumerAuthGateway;
 import co.com.bb.kata.model.gateway.model.User;
+import co.com.bb.kata.model.usercourseprogress.CourseProgressResponse;
 import co.com.bb.kata.model.usercourseprogress.UserCourseProgress;
 import co.com.bb.kata.model.usercourseprogress.gateways.UserCourseProgressRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 public class UserCourseUseCase {
@@ -33,6 +36,16 @@ public class UserCourseUseCase {
                 .build();
 
         return userCourseProgressRepository.save(progress);
+    }
+
+    public List<CourseProgressResponse> getUserCoursesProgress(Long userId) {
+        // Validar que el usuario exista
+        var user = restConsumerAuthGateway.getUserById(userId);
+        if (user == null) {
+            throw new BusinessException(BusinessExceptionMessage.USER_NOT_FOUND);
+        }
+
+        return userCourseProgressRepository.findProgressByUserId(userId);
     }
 
 }
