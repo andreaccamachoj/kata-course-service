@@ -32,31 +32,27 @@ public class BadgeJPARepositoryAdapter extends AdapterOperations<
                         .description(entity.getDescription())
                         .iconUrl(entity.getIconS3Key())
                         .criterion(entity.getCriterion())
-                        .id(entity.getCourse().getId())
+                        .courseId(entity.getCourse().getId())
                         .build())
                 .orElse(null);
     }
 
     @Override
     public BadgeByCourse saveBadge(BadgeByCourse badge) {
-        // Mapear el dominio a la entidad JPA
         BadgeEntity entity = new BadgeEntity();
         entity.setName(badge.getName());
         entity.setDescription(badge.getDescription());
         entity.setIconS3Key(badge.getIconUrl());
         entity.setCriterion(badge.getCriterion());
 
-        // Relacionar el curso (1:1)
         if (badge.getCourseId() != null) {
             CourseEntity course = new CourseEntity();
             course.setId(badge.getCourseId());
             entity.setCourse(course);
         }
 
-        // Guardar en base de datos
         BadgeEntity savedEntity = repository.save(entity);
 
-        // Mapear de vuelta al dominio
         return mapper.map(savedEntity, BadgeByCourse.class);
     }
 }
