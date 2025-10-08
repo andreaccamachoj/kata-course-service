@@ -25,6 +25,10 @@ public enum BusinessExceptionMessage {
     COURSE_NOT_ASSIGNED(
             "BUS0005", "The user is not assigned to this course", "404",
             "The user is not assigned to the course with the provided ID."
+    ),
+    BADGE_NOT_FOUND(
+            "BUS0006", "The badge for the specified course was not found", "404",
+            "The badge for the course with the provided ID was not found."
     );
 
     private final String code;

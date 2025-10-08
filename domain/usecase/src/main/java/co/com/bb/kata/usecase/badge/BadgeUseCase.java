@@ -1,5 +1,9 @@
 package co.com.bb.kata.usecase.badge;
 
+import co.com.bb.kata.model.badge.gateways.BadgeRepository;
+import co.com.bb.kata.model.exception.BusinessException;
+import co.com.bb.kata.model.exception.message.BusinessExceptionMessage;
+import co.com.bb.kata.model.userbadge.BadgeByCourse;
 import co.com.bb.kata.model.userbadge.UserBadgesList;
 import co.com.bb.kata.model.userbadge.gateways.UserBadgeRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +15,18 @@ public class BadgeUseCase {
 
     private final UserBadgeRepository userBadgeRepository;
 
+    private final BadgeRepository badgeRepository;
+
     public List<UserBadgesList> getBadgesByUser(Long userId) {
         return userBadgeRepository.findByUserId(userId);
+    }
+
+    public BadgeByCourse getBadgeByCourseId(Long courseId) {
+        BadgeByCourse badge = badgeRepository.findByCourseId(courseId);
+        if (badge == null) {
+            throw new BusinessException(BusinessExceptionMessage.BADGE_NOT_FOUND);
+        }
+        return badge;
+
     }
 }
