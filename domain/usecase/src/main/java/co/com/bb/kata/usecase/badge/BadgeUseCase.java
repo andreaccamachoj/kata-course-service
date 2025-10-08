@@ -4,10 +4,12 @@ import co.com.bb.kata.model.badge.gateways.BadgeRepository;
 import co.com.bb.kata.model.exception.BusinessException;
 import co.com.bb.kata.model.exception.message.BusinessExceptionMessage;
 import co.com.bb.kata.model.userbadge.BadgeByCourse;
+import co.com.bb.kata.model.userbadge.UserBadge;
 import co.com.bb.kata.model.userbadge.UserBadgesList;
 import co.com.bb.kata.model.userbadge.gateways.UserBadgeRepository;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -28,5 +30,12 @@ public class BadgeUseCase {
         }
         return badge;
 
+    }
+
+    public UserBadge assignBadgeToUser(UserBadge userBadge) {
+        if (userBadgeRepository.existsByUserIdAndBadgeId(userBadge.getUserId(), userBadge.getBadgeId())) {
+            throw new BusinessException(BusinessExceptionMessage.BADGE_ALREADY_ASSIGNED);
+        }
+        return userBadgeRepository.assignBadge(userBadge);
     }
 }

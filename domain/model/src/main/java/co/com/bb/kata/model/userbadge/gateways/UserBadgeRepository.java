@@ -10,7 +10,7 @@ public interface UserBadgeRepository {
 
     boolean existsByUserIdAndBadgeId(Long userId, Long badgeId);
 
-    UserBadge assignBadge(Long userId, Long badgeId);
+    UserBadge assignBadge(UserBadge userBadge);
 
     List<UserBadgesList> findByUserId(Long userId);
 }

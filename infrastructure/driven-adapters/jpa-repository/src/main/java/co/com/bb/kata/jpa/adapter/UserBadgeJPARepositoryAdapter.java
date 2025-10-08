@@ -2,6 +2,7 @@ package co.com.bb.kata.jpa.adapter;
 
 import co.com.bb.kata.jpa.UserBadgeJPARepository;
 import co.com.bb.kata.jpa.entity.BadgeEntity;
+import co.com.bb.kata.jpa.entity.CourseEntity;
 import co.com.bb.kata.jpa.entity.UserBadgeEntity;
 import co.com.bb.kata.jpa.helper.AdapterOperations;
 import co.com.bb.kata.model.userbadge.UserBadge;
@@ -32,14 +33,18 @@ public class UserBadgeJPARepositoryAdapter extends AdapterOperations<
     }
 
     @Override
-    public UserBadge assignBadge(Long userId, Long badgeId) {
+    public UserBadge assignBadge(UserBadge userBadge) {
         UserBadgeEntity entity = new UserBadgeEntity();
-        entity.setUserId(userId);
+        entity.setUserId(userBadge.getUserId());
         entity.setAwardedAt(LocalDateTime.now());
 
         BadgeEntity badge = new BadgeEntity();
-        badge.setId(badgeId);
+        badge.setId(userBadge.getBadgeId());
         entity.setBadge(badge);
+
+        CourseEntity course = new CourseEntity();
+        course.setId(userBadge.getCourse().getId());
+        entity.setCourse(course);
 
         UserBadgeEntity saved = repository.save(entity);
 

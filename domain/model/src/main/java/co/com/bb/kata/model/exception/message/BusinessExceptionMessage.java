@@ -29,7 +29,14 @@ public enum BusinessExceptionMessage {
     BADGE_NOT_FOUND(
             "BUS0006", "The badge for the specified course was not found", "404",
             "The badge for the course with the provided ID was not found."
+    ),
+    BADGE_ALREADY_ASSIGNED(
+            "BUS0007",
+            "The badge for the specified course is already assigned to the user.",
+            "409",
+            "The user already has this badge assigned. Duplicate assignments are not allowed."
     );
+
 
     private final String code;
     private final String description;

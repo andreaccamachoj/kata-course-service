@@ -3,6 +3,7 @@ package co.com.bb.kata.usecase.chapter;
 import co.com.bb.kata.model.chapter.gateways.ChapterRepository;
 import co.com.bb.kata.model.exception.BusinessException;
 import co.com.bb.kata.model.exception.message.BusinessExceptionMessage;
+import co.com.bb.kata.model.userbadge.UserBadge;
 import co.com.bb.kata.model.userbadge.gateways.UserBadgeRepository;
 import co.com.bb.kata.model.userchapterprogress.UserChapterProgress;
 import co.com.bb.kata.model.userchapterprogress.gateways.UserChapterProgressRepository;
@@ -67,7 +68,11 @@ public class ChapterUseCase {
     private void assignBadgeIfNotExists(Long userId, Long courseId) {
 
         if (!userBadgeRepository.existsByUserIdAndBadgeId(userId, courseId)) {
-            userBadgeRepository.assignBadge(userId, courseId);
+            UserBadge userBadge = UserBadge.builder()
+                    .userId(userId)
+                    .badgeId(courseId)
+                    .build();
+            userBadgeRepository.assignBadge(userBadge);
         }
     }
 
