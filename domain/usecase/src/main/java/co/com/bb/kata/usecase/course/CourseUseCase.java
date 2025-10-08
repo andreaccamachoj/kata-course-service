@@ -1,9 +1,11 @@
 package co.com.bb.kata.usecase.course;
 
+import co.com.bb.kata.model.badge.gateways.BadgeRepository;
 import co.com.bb.kata.model.chapter.UploadedFile;
 import co.com.bb.kata.model.course.Course;
 import co.com.bb.kata.model.course.gateways.CourseRepository;
 import co.com.bb.kata.model.gateway.StorageGateway;
+import co.com.bb.kata.model.userbadge.BadgeByCourse;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -14,6 +16,7 @@ public class CourseUseCase {
 
     private final CourseRepository courseRepository;
     private final StorageGateway storageGateway;
+    private final BadgeRepository badgeRepository;
 
     public List<Course> getAllCourses() {
         return courseRepository.findAllCourses();
@@ -43,7 +46,15 @@ public class CourseUseCase {
             chapter.setS3Key(s3Key);
             chapter.setContentType(matchingFile.getContentType());
         });
-        courseRepository.saveAggregate(course);
+        Course savedCourse= courseRepository.saveAggregate(course);
+        BadgeByCourse badge = new BadgeByCourse(
+                "Badge for " + savedCourse.getTitle(),
+                "Awarded for completing the course: " + savedCourse.getTitle(),
+                null,
+                "Complete the course",
+                savedCourse.getId()
+        );
+        badgeRepository.saveBadge(badge);
     }
 
     private UploadedFile findFileByFileName(List<UploadedFile> files, String fileName) {

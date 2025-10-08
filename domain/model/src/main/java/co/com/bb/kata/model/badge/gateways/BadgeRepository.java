@@ -4,4 +4,5 @@ import co.com.bb.kata.model.userbadge.BadgeByCourse;
 
 public interface BadgeRepository {
     BadgeByCourse findByCourseId(Long courseId);
+    public BadgeByCourse saveBadge(BadgeByCourse badge);
 }
