@@ -46,7 +46,7 @@ adapter:
       bucketName: "${BUCKET_NAME:coursefileslearningacademykatabb}"
       region: "${AWS_REGION:us-east-1}"
   restconsumer:
-    url: "http://localhost:8080/api/v1/auth"
+    url: "${AUTH_SERVICE_URL:http://localhost:8080/api/v1/auth}"
 resilience4j:
   circuitbreaker:
     instances:
