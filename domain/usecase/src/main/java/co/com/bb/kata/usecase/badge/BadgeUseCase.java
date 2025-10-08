@@ -9,7 +9,6 @@ import co.com.bb.kata.model.userbadge.UserBadgesList;
 import co.com.bb.kata.model.userbadge.gateways.UserBadgeRepository;
 import lombok.RequiredArgsConstructor;
 
-import java.util.Date;
 import java.util.List;
 
 @RequiredArgsConstructor

@@ -23,4 +23,7 @@ public class Course {
     private String coverUrl;
     private LocalDateTime createdAt;
     private List<Chapter> chapterList;
+
+    public Course(Long courseId) {
+    }
 }

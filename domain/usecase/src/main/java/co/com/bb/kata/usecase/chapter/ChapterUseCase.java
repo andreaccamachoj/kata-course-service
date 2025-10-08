@@ -1,8 +1,12 @@
 package co.com.bb.kata.usecase.chapter;
 
+import co.com.bb.kata.model.badge.Badge;
+import co.com.bb.kata.model.badge.gateways.BadgeRepository;
 import co.com.bb.kata.model.chapter.gateways.ChapterRepository;
+import co.com.bb.kata.model.course.Course;
 import co.com.bb.kata.model.exception.BusinessException;
 import co.com.bb.kata.model.exception.message.BusinessExceptionMessage;
+import co.com.bb.kata.model.userbadge.BadgeByCourse;
 import co.com.bb.kata.model.userbadge.UserBadge;
 import co.com.bb.kata.model.userbadge.gateways.UserBadgeRepository;
 import co.com.bb.kata.model.userchapterprogress.UserChapterProgress;
@@ -20,6 +24,7 @@ public class ChapterUseCase {
     private final UserCourseProgressRepository userCourseProgressRepository;
     private final ChapterRepository chapterRepository;
     private final UserBadgeRepository userBadgeRepository;
+    private final BadgeRepository badgeRepository;
 
     public void completeChapter(Long userId, Long courseId, Long chapterId) {
         if (userChapterProgressRepository.existsByUserIdAndChapterId(userId, chapterId)) {
@@ -67,10 +72,13 @@ public class ChapterUseCase {
 
     private void assignBadgeIfNotExists(Long userId, Long courseId) {
 
-        if (!userBadgeRepository.existsByUserIdAndBadgeId(userId, courseId)) {
+        BadgeByCourse badge = badgeRepository.findByCourseId(courseId);
+
+        if (!userBadgeRepository.existsByUserIdAndBadgeId(userId, badge.getId())) {
             UserBadge userBadge = UserBadge.builder()
                     .userId(userId)
-                    .badgeId(courseId)
+                    .course(new Course(courseId))
+                    .badgeId(badge.getId())
                     .build();
             userBadgeRepository.assignBadge(userBadge);
         }
