@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8082
 spring:
   application:
     name: "course"
@@ -39,7 +39,7 @@ management:
     circuitbreakers:
       enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080"
+  allowed-origins: "http://localhost:4173,http://localhost:4200,http://localhost:8080,http://localhost:8082,http://localhost:8081"
 adapter:
   aws:
     s3:
@@ -48,7 +48,7 @@ adapter:
       accessKey: "${AWS_ACCESS_KEY}"
       secretKey: "${AWS_SECRET_KEY}"
   restconsumer:
-    url: "${AUTH_SERVICE_URL:http://localhost:8080/api/v1/auth}"
+    url: "${ADAPTER_RESTCONSUMER_URL:http://localhost:8081/api/v1/auth}"
 resilience4j:
   circuitbreaker:
     instances:

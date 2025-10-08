@@ -65,7 +65,7 @@ public class ChapterUseCase {
 
         userCourseProgressRepository.save(progress);
 
-        
+
     }
 
     private void assignBadgeIfNotExists(Long userId, Long courseId) {

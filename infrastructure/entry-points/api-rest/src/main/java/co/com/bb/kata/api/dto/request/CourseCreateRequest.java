@@ -25,6 +25,8 @@ public class CourseCreateRequest {
 
     @Size(max = 255)
     private String tags;
+    
+    private String coverUrl;
 
     @Builder.Default
     private Boolean published = false;

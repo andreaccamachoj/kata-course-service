@@ -50,7 +50,7 @@ public class CourseUseCase {
         BadgeByCourse badge = new BadgeByCourse(
                 "Badge for " + savedCourse.getTitle(),
                 "Awarded for completing the course: " + savedCourse.getTitle(),
-                null,
+                course.getCoverUrl(),
                 "Complete the course",
                 savedCourse.getId()
         );

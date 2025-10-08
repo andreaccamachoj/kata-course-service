@@ -26,6 +26,7 @@ public class CourseMapper {
                 .tags(dto.getTags())
                 .published(dto.getPublished())
                 .chapterList(chapters)
+                .coverUrl(dto.getCoverUrl())
                 .build();
     }
 }
