@@ -4,6 +4,7 @@ import co.com.bb.kata.model.exception.BusinessException;
 import co.com.bb.kata.model.exception.message.BusinessExceptionMessage;
 import co.com.bb.kata.model.gateway.RestConsumerAuthGateway;
 import co.com.bb.kata.model.gateway.model.User;
+import co.com.bb.kata.model.userchapterprogress.gateways.UserChapterProgressRepository;
 import co.com.bb.kata.model.usercourseprogress.CourseProgressResponse;
 import co.com.bb.kata.model.usercourseprogress.UserCourseProgress;
 import co.com.bb.kata.model.usercourseprogress.gateways.UserCourseProgressRepository;
@@ -16,6 +17,8 @@ public class UserCourseUseCase {
 
     private final UserCourseProgressRepository userCourseProgressRepository;
     private final RestConsumerAuthGateway restConsumerAuthGateway;
+    private final UserChapterProgressRepository userChapterProgressRepository;
+
 
     public UserCourseProgress assignCourse(Long userId, Long courseId) {
 
@@ -53,10 +56,14 @@ public class UserCourseUseCase {
             throw new BusinessException(BusinessExceptionMessage.USER_NOT_FOUND);
         }
 
-        CourseProgressResponse progress = userCourseProgressRepository.findProgressByUserAndCourse(userId, courseId);
+        var progress = userCourseProgressRepository.findProgressByUserAndCourse(userId, courseId);
         if (progress == null) {
             throw new BusinessException(BusinessExceptionMessage.COURSE_NOT_ASSIGNED);
         }
+
+        var completedChapters = userChapterProgressRepository.findCompletedChaptersByUserAndCourse(userId, courseId);
+
+        progress.setCompletedChapters(completedChapters);
 
         return progress;
     }

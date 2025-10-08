@@ -4,6 +4,7 @@ import co.com.bb.kata.jpa.UserChapterProgressJPARepository;
 import co.com.bb.kata.jpa.entity.ChapterEntity;
 import co.com.bb.kata.jpa.entity.UserChapterProgressEntity;
 import co.com.bb.kata.jpa.helper.AdapterOperations;
+import co.com.bb.kata.model.userchapterprogress.ChapterCompletedResponse;
 import co.com.bb.kata.model.userchapterprogress.UserChapterProgress;
 import co.com.bb.kata.model.userchapterprogress.gateways.UserChapterProgressRepository;
 import jakarta.persistence.EntityManager;
@@ -12,6 +13,7 @@ import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Repository
 public class UserChapterProgressJPARepositoryAdapter extends AdapterOperations<
@@ -57,6 +59,18 @@ public class UserChapterProgressJPARepositoryAdapter extends AdapterOperations<
     public long countCompletedByUserAndCourse(Long userId, Long courseId) {
         return repository.countByUserIdAndChapter_CourseEntity_Id(userId, courseId);
     }
+
+    @Override
+    public List<ChapterCompletedResponse> findCompletedChaptersByUserAndCourse(Long userId, Long courseId) {
+        return repository.findCompletedChaptersByUserAndCourse(userId, courseId)
+                .stream()
+                .map(entity -> ChapterCompletedResponse.builder()
+                        .chapterId(entity.getChapter().getId())
+                        .chapterTitle(entity.getChapter().getTitle())
+                        .build())
+                .toList();
+    }
+
 
 
 }
